@@ -15,7 +15,7 @@ public class BuildScript
             .Select(s => s.path)
             .ToArray();
 
-        string outputPath = "Build/WebGL";
+        string outputPath = "Build";
 
         BuildPlayerOptions options = new BuildPlayerOptions
         {
