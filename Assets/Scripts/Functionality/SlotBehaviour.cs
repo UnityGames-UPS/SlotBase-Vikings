@@ -351,7 +351,7 @@ public class SlotBehaviour : MonoBehaviour
     if (LineBet_text) LineBet_text.text = SocketManager.InitialData.bets[BetCounter].ToString();
     if (TotalBet_text) TotalBet_text.text = (SocketManager.InitialData.bets[BetCounter] * Lines).ToString();
     currentTotalBet = SocketManager.InitialData.bets[BetCounter] * Lines;
-
+    uiManager.InitialiseUIData(SocketManager.UIData.paylines);
   }
 
   private void ChangeBet(bool IncDec)
@@ -376,7 +376,7 @@ public class SlotBehaviour : MonoBehaviour
     if (LineBet_text) LineBet_text.text = SocketManager.InitialData.bets[BetCounter].ToString();
     if (TotalBet_text) TotalBet_text.text = (SocketManager.InitialData.bets[BetCounter] * Lines).ToString();
     currentTotalBet = SocketManager.InitialData.bets[BetCounter] * Lines;
-
+    uiManager.InitialiseUIData(SocketManager.UIData.paylines);
   }
 
   #region InitialFunctions
@@ -596,17 +596,15 @@ public class SlotBehaviour : MonoBehaviour
     CheckForFeaturesAnimation();
 
 
-    if (IsTurboOn)
+    if (IsTurboOn || IsFreeSpin)
     {
-
-      yield return new WaitForSeconds(0.1f);
       StopSpinToggle = true;
     }
     else
     {
       for (int i = 0; i < 5; i++)
       {
-        yield return new WaitForSeconds(0.1f);
+        yield return null;
         if (StopSpinToggle)
         {
           break;

@@ -5872,7 +5872,7 @@ MonoBehaviour:
   slotManager: {fileID: 2046803210}
   uiManager: {fileID: 377874625}
   JSManager: {fileID: 1029290966}
-  testToken: fd517329b0f140efa0127fa4f925e4cb
+  testToken: b3071963c39441e8b6c17723a5204ef4
   RaycastBlocker: {fileID: 2036107390}
 --- !u!1 &502968745
 GameObject:
