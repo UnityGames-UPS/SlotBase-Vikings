@@ -15,12 +15,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  #important: get full history
+          fetch-depth: 0
 
       - name: Set up Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/UnityGames-UPS/SlotBase-Vikings.git
 
       - name: Fetch branches
         run: |
@@ -36,8 +37,5 @@ jobs:
 
       - name: Push merged changes
         run: |
-         git config user.name "github-actions[bot]"
-         git config user.email "github-actions[bot]@users.noreply.github.com"
-         git remote set-url origin https://${{ secrets.GH_TOKEN }}@github.com/UnityGames-UPS/SlotBase-Vikings.git
-         git push origin prod
+          git push origin prod
 
