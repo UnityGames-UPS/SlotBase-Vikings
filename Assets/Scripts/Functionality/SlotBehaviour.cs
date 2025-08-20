@@ -526,7 +526,7 @@ public class SlotBehaviour : MonoBehaviour
   private void StartSlots(bool autoSpin = false)
   {
     if (audioController) audioController.PlaySpinButtonAudio();
-
+    if (TotalWin_text) TotalWin_text.text = "0.000";
     if (!autoSpin)
     {
       if (AutoSpinRoutine != null)
