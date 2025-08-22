@@ -5,7 +5,6 @@ using UnityEngine.UI; // For DOTween
 
 public class ButtonAnimator : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-  
   private Transform buttonTransform; // Assign the Button's transform in the Inspector.
   private Button button;
   private float OrignalScale;
