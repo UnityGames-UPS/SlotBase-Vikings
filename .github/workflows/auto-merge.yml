@@ -9,10 +9,23 @@ on:
 
 jobs:
   auto-merge:
-    if: github.base_ref == 'prod' && github.head_ref == 'dev-build'
+    # Fix: Allow job to run on PRs from dev-build to prod, or manually via workflow_dispatch
+    if: >
+      (github.event_name == 'pull_request' &&
+       github.base_ref == 'prod' &&
+       github.head_ref == 'dev-build') ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug Event Info
+        run: |
+          echo "Event:      ${{ github.event_name }}"
+          echo "Base ref:   ${{ github.base_ref }}"
+          echo "Head ref:   ${{ github.head_ref }}"
+          echo "Ref:        ${{ github.ref }}"
+          echo "SHA:        ${{ github.sha }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -37,5 +50,4 @@ jobs:
           git merge origin/dev-build -X theirs --no-edit || true
 
       - name: Push merged changes
-        run: |
-          git push origin prod
+        run: git push origin prod
