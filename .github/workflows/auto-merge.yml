@@ -2,7 +2,10 @@ name: Auto Merge dev-build into prod
 
 on:
   pull_request:
+    branches:
+      - prod
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 jobs:
   auto-merge:
@@ -36,4 +39,3 @@ jobs:
       - name: Push merged changes
         run: |
           git push origin prod
-#Workflow
