@@ -16,7 +16,6 @@ jobs:
        github.head_ref == 'dev-build') ||
       github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-
     steps:
       - name: Debug Event Info
         run: |
@@ -47,7 +46,7 @@ jobs:
 
       - name: Merge dev-build into prod (prefer theirs)
         run: |
-          git merge origin/dev-build -X theirs --no-edit || true
+          git merge origin/dev-build -X theirs --no-edit
 
       - name: Push merged changes
         run: git push origin prod
