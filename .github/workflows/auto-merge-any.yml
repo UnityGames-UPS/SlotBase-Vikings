@@ -1,35 +1,26 @@
 name: Auto Merge any branch into any branch
 
 on:
-  pull_request:
-    branches:
-      - prod
-    types: [opened, synchronize, reopened]
   workflow_dispatch:
     inputs:
       source_branch:
-        description: 'Branch to merge from'
+        description: "Branch to merge from"
         required: false
-        default: 'dev-build'
+        default: "dev-build"
       target_branch:
-        description: 'Branch to merge into'
+        description: "Branch to merge into"
         required: false
-        default: 'prod'
+        default: "prod"
 
 jobs:
   auto-merge:
-    if: >
-      (github.event_name == 'pull_request' &&
-       github.base_ref == 'prod' &&
-       github.head_ref == 'dev-build') ||
-      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Debug Event Info
         run: |
           echo "Event:      ${{ github.event_name }}"
-          echo "Base ref:   ${{ github.base_ref || github.event.inputs.target_branch }}"
-          echo "Head ref:   ${{ github.head_ref || github.event.inputs.source_branch }}"
+          echo "Source:     ${{ github.event.inputs.source_branch }}"
+          echo "Target:     ${{ github.event.inputs.target_branch }}"
           echo "Ref:        ${{ github.ref }}"
           echo "SHA:        ${{ github.sha }}"
 
@@ -46,15 +37,15 @@ jobs:
 
       - name: Fetch branches
         run: |
-          git fetch origin ${{ github.event.inputs.target_branch || 'prod' }}
-          git fetch origin ${{ github.event.inputs.source_branch || 'dev-build' }}
+          git fetch origin ${{ github.event.inputs.target_branch }}
+          git fetch origin ${{ github.event.inputs.source_branch }}
 
       - name: Checkout target branch
-        run: git checkout ${{ github.event.inputs.target_branch || 'prod' }}
+        run: git checkout ${{ github.event.inputs.target_branch }}
 
       - name: Merge source branch into target branch (prefer theirs)
         run: |
-          git merge origin/${{ github.event.inputs.source_branch || 'dev-build' }} -X theirs --no-edit
+          git merge origin/${{ github.event.inputs.source_branch }} -X theirs --no-edit
 
       - name: Push merged changes
-        run: git push origin ${{ github.event.inputs.target_branch || 'prod' }}
+        run: git push origin ${{ github.event.inputs.target_branch }}
