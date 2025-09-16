@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using DG.Tweening;
+using Best.SocketIO;
 
 public class AudioController : MonoBehaviour
 {
@@ -13,12 +15,11 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip[] Bonusclips;
     [SerializeField] private AudioSource bg_audioBonus;
     [SerializeField] private AudioSource audioPlayer_Bonus;
-
     private void Start()
     {
         if (bg_adudio) bg_adudio.Play();
-        audioPlayer_button.clip = clips[clips.Length-1];
-        audioSpin_button.clip = clips[clips.Length-2];
+        audioPlayer_button.clip = clips[clips.Length - 1];
+        audioSpin_button.clip = clips[clips.Length - 2];
     }
 
     internal void CheckFocusFunction(bool focus, bool IsSpinning)
@@ -47,7 +48,7 @@ public class AudioController : MonoBehaviour
 
     internal void SwitchBGSound(bool isbonus)
     {
-        if(isbonus)
+        if (isbonus)
         {
             if (bg_audioBonus) bg_audioBonus.enabled = true;
             if (bg_adudio) bg_adudio.enabled = false;
@@ -122,8 +123,10 @@ public class AudioController : MonoBehaviour
 
     internal void StopWLAaudio()
     {
+
         audioPlayer_wl.Stop();
         audioPlayer_wl.loop = false;
+
     }
 
     internal void StopBonusAaudio()
@@ -137,7 +140,7 @@ public class AudioController : MonoBehaviour
         bg_adudio.Stop();
     }
 
-    internal void ToggleMute(bool toggle, string type="all")
+    internal void ToggleMute(bool toggle, string type = "all")
     {
         switch (type)
         {
@@ -146,11 +149,11 @@ public class AudioController : MonoBehaviour
                 bg_audioBonus.mute = toggle;
                 break;
             case "button":
-                audioPlayer_button.mute=toggle;
-                audioSpin_button.mute=toggle;
+                audioPlayer_button.mute = toggle;
+                audioSpin_button.mute = toggle;
                 break;
             case "wl":
-                audioPlayer_wl.mute=toggle;
+                audioPlayer_wl.mute = toggle;
                 audioPlayer_Bonus.mute = toggle;
                 break;
             case "all":
@@ -161,5 +164,4 @@ public class AudioController : MonoBehaviour
                 break;
         }
     }
-
 }

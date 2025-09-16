@@ -149,6 +149,13 @@ public class SlotBehaviour : MonoBehaviour
   private bool IsTurboOn;
   internal bool WasAutoSpinOn;
   internal bool socketConnected = false;
+  private int[,] initialMatrix = new int[,]
+  {
+    { 8, 11, 11, 12, 8 },
+    { 11, 8, 8, 8, 12 },
+    { 12, 12, 12, 11, 11 }
+  };
+
   private void Start()
   {
     IsAutoSpin = false;
@@ -236,6 +243,7 @@ public class SlotBehaviour : MonoBehaviour
   {
     while (IsAutoSpin)
     {
+      yield return new WaitUntil(() => !CheckPopups);
       StartSlots(IsAutoSpin);
       yield return tweenroutine;
       yield return new WaitForSeconds(SpinDelay);
@@ -351,7 +359,7 @@ public class SlotBehaviour : MonoBehaviour
     if (LineBet_text) LineBet_text.text = SocketManager.InitialData.bets[BetCounter].ToString();
     if (TotalBet_text) TotalBet_text.text = (SocketManager.InitialData.bets[BetCounter] * Lines).ToString();
     currentTotalBet = SocketManager.InitialData.bets[BetCounter] * Lines;
-    uiManager.InitialiseUIData(SocketManager.UIData.paylines);
+
   }
 
   private void ChangeBet(bool IncDec)
@@ -380,17 +388,41 @@ public class SlotBehaviour : MonoBehaviour
   }
 
   #region InitialFunctions
-  internal void shuffleInitialMatrix()
+  // internal void shuffleInitialMatrix()
+  // {
+  //   for (int i = 0; i < Tempimages.Count; i++)
+  //   {
+  //     for (int j = 0; j < 3; j++)
+  //     {
+  //       int randomIndex = UnityEngine.Random.Range(0, 14);
+  //       Tempimages[i].slotImages[j].sprite = myImages[randomIndex];
+  //     }
+  //   }
+  // }
+
+
+  internal void InitializeMatrix()
   {
-    for (int i = 0; i < Tempimages.Count; i++)
+    for (int row = 0; row < initialMatrix.GetLength(0); row++)
     {
-      for (int j = 0; j < 3; j++)
+      for (int col = 0; col < initialMatrix.GetLength(1); col++)
       {
-        int randomIndex = UnityEngine.Random.Range(0, 14);
-        Tempimages[i].slotImages[j].sprite = myImages[randomIndex];
+        int val = initialMatrix[row, col];
+
+        Tempimages[col].slotImages[row].sprite = myImages[val];
+
+        ImageAnimation animScript = Tempimages[col].slotImages[row].GetComponent<ImageAnimation>();
+        if (animScript != null)
+        {
+          PopulateAnimationSprites(animScript, val);
+
+          animScript.StartAnimation();
+          TempList.Add(animScript);
+        }
       }
     }
   }
+
 
   internal void SetInitialUI()
   {
@@ -525,8 +557,10 @@ public class SlotBehaviour : MonoBehaviour
   //starts the spin process
   private void StartSlots(bool autoSpin = false)
   {
+    
     if (audioController) audioController.PlaySpinButtonAudio();
     if (TotalWin_text) TotalWin_text.text = "0.000";
+
     if (!autoSpin)
     {
       if (AutoSpinRoutine != null)
@@ -580,7 +614,7 @@ public class SlotBehaviour : MonoBehaviour
     }
 
     SocketManager.AccumulateResult(BetCounter);
-    yield return new WaitUntil(() => SocketManager.isResultdone);                                                                               // REsult
+    yield return new WaitUntil(() => SocketManager.isResultdone);
 
     for (int i = 0; i < 3; i++)
     {

@@ -29,6 +29,8 @@ public class BonusController : MonoBehaviour
     private Transform Loose_Transform;
     [SerializeField]
     private SocketIOManager m_SocketManager;
+    [SerializeField]
+    private UIManager uIManager;
 
     internal bool isCollision = false;
 
@@ -60,7 +62,8 @@ public class BonusController : MonoBehaviour
         if (slotManager.IsAutoSpin || slotManager.IsFreeSpin)
         {
             Spin_Button.gameObject.SetActive(false);
-            DOVirtual.DelayedCall(1f, () => {
+            DOVirtual.DelayedCall(1f, () =>
+            {
                 Spinbutton();
             });
         }
@@ -85,7 +88,7 @@ public class BonusController : MonoBehaviour
     {
         for (int i = 0; i < bonusdata.Count; i++)
         {
-            if (bonusdata[i] == "-1") 
+            if (bonusdata[i] == "-1")
             {
                 if (Bonus_Text[i]) Bonus_Text[i].text = "NO \nBONUS";
             }
@@ -102,13 +105,13 @@ public class BonusController : MonoBehaviour
     private void RotateWheel()
     {
         if (Wheel_Transform) Wheel_Transform.localEulerAngles = new Vector3(0, 0, 359);
-        if (Wheel_Transform) wheelRoutine =  Wheel_Transform.DORotate(new Vector3(0, 0, 0), 1, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(-1);
+        if (Wheel_Transform) wheelRoutine = Wheel_Transform.DORotate(new Vector3(0, 0, 0), 1, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(-1);
         _audioManager.PlayBonusAudio("cycleSpin");
     }
 
     private void ResetColliders()
     {
-        foreach(BoxCollider2D col in point_colliders)
+        foreach (BoxCollider2D col in point_colliders)
         {
             col.enabled = false;
         }
@@ -129,7 +132,7 @@ public class BonusController : MonoBehaviour
             Wheel_Transform.DORotate(Wheel_Transform.eulerAngles + Vector3.forward * Random.Range(-elasticIntensity, elasticIntensity), 1f)
                 .SetEase(Ease.OutElastic);
         }
-        if (Bonus_Text[stopIndex].text.Equals("NO \nBONUS")) 
+        if (Bonus_Text[stopIndex].text.Equals("NO \nBONUS"))
         {
             if (Loose_Transform) Loose_Transform.gameObject.SetActive(true);
             if (Loose_Transform) Loose_Transform.localScale = Vector3.zero;
@@ -139,18 +142,22 @@ public class BonusController : MonoBehaviour
         }
         else
         {
-            if (Win_Transform) Win_Transform.gameObject.SetActive(true);
-            if (Win_Transform) Win_Transform.localScale = Vector3.zero;
-            if (PopupPanel) PopupPanel.SetActive(true);
-            if (Win_Transform) Win_Transform.DOScale(Vector3.one, 1f);
+            // if (Win_Transform) Win_Transform.gameObject.SetActive(true);
+            // if (Win_Transform) Win_Transform.localScale = Vector3.zero;
+            // if (PopupPanel) PopupPanel.SetActive(true);
+            // if (Win_Transform) Win_Transform.DOScale(Vector3.one, 1f);            ////
+            uIManager.PopulateWin(1, m_SocketManager.ResultData.bonus.amount);
             PlayWinLooseSound(true);
         }
-        DOVirtual.DelayedCall(3f, () =>
+        DOVirtual.DelayedCall(1.5f, () =>
         {
             ResetColliders();
             if (_audioManager) _audioManager.SwitchBGSound(false);
             if (Bonus_Object) Bonus_Object.SetActive(false);
-            slotManager.CheckWinPopups();
+            DOVirtual.DelayedCall(1f, () =>
+            {
+                slotManager.CheckWinPopups();
+            });
         });
     }
 

@@ -367,12 +367,12 @@ public class UIManager : MonoBehaviour
     double initAmount = 0;
     if (WinPopup_Object) WinPopup_Object.SetActive(true);
     if (MainPopup_Object) MainPopup_Object.SetActive(true);
-    WinPopupTextTween = DOTween.To(() => initAmount, (val) => initAmount = val, amount, 5f).OnUpdate(() =>
+    WinPopupTextTween = DOTween.To(() => initAmount, (val) => initAmount = val, amount, 1f).OnUpdate(() =>
     {
       if (Win_Text) Win_Text.text = initAmount.ToString("F3");
     });
 
-    ClosePopupTween = DOVirtual.DelayedCall(6f, () =>
+    ClosePopupTween = DOVirtual.DelayedCall(2f, () =>
     {
       ClosePopup(WinPopup_Object);
       slotManager.CheckPopups = false;
@@ -397,42 +397,41 @@ public class UIManager : MonoBehaviour
       string text = null;
       if (paylines.symbols[i].multiplier[0] != 0)
       {
+        // text += "5x - " + paylines.symbols[i].multiplier[0] + "x";
         text += "5x - " + (paylines.symbols[i].multiplier[0] * betPerLine);
       }
       if (paylines.symbols[i].multiplier[1] != 0)
       {
+        // text += "\n4x - " + paylines.symbols[i].multiplier[1] + "x";
         text += "\n4x - " + (paylines.symbols[i].multiplier[1] * betPerLine);
       }
       if (paylines.symbols[i].multiplier[2] != 0)
       {
+        // text += "\n3x - " + paylines.symbols[i].multiplier[2] + "x";
         text += "\n3x - " + (paylines.symbols[i].multiplier[2] * betPerLine);
       }
       if (SymbolsText[i]) SymbolsText[i].text = text;
     }
 
-    for (int i = 0; i < paylines.symbols.Count; i++)
+    FreeSpin_Text.text = GetSymbolDescription("FreeSpin");
+    Wild_Text.text = GetSymbolDescription("Wild");
+    Scatter_Text.text = GetSymbolDescription("Scatter");
+    Jackpot_Text.text = GetSymbolDescription("Jackpot");
+    Bonus_Text.text = GetSymbolDescription("Bonus");
+
+  }
+
+  internal string GetSymbolDescription(string name)
+  {
+    if (socketManager.UIData.paylines.symbols == null) return null;
+    foreach (var symbol in socketManager.UIData.paylines.symbols)
     {
-      if (paylines.symbols[i].name.ToUpper() == "FREESPIN")
+      if (symbol.name == name)
       {
-        if (FreeSpin_Text) FreeSpin_Text.text = paylines.symbols[i].description.ToString();
-      }
-      if (paylines.symbols[i].name.ToUpper() == "SCATTER")
-      {
-        if (Scatter_Text) Scatter_Text.text = paylines.symbols[i].description.ToString();
-      }
-      if (paylines.symbols[i].name.ToUpper() == "JACKPOT")
-      {
-        if (Jackpot_Text) Jackpot_Text.text = paylines.symbols[i].description.ToString();
-      }
-      if (paylines.symbols[i].name.ToUpper() == "BONUS")
-      {
-        if (Bonus_Text) Bonus_Text.text = paylines.symbols[i].description.ToString();
-      }
-      if (paylines.symbols[i].name.ToUpper() == "WILD")
-      {
-        if (Wild_Text) Wild_Text.text = paylines.symbols[i].description.ToString();
+        return symbol.description;
       }
     }
+    return null;
   }
 
   private void CallOnExitFunction()
@@ -506,7 +505,7 @@ public class UIManager : MonoBehaviour
     if (MainPopup_Object) MainPopup_Object.SetActive(true);
   }
 
-  private void ClosePopup(GameObject Popup)
+  internal void ClosePopup(GameObject Popup)
   {
     if (audioController) audioController.PlayButtonAudio();
     if (Popup) Popup.SetActive(false);
