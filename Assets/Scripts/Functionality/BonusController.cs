@@ -142,11 +142,11 @@ public class BonusController : MonoBehaviour
         }
         else
         {
-            // if (Win_Transform) Win_Transform.gameObject.SetActive(true);
-            // if (Win_Transform) Win_Transform.localScale = Vector3.zero;
-            // if (PopupPanel) PopupPanel.SetActive(true);
-            // if (Win_Transform) Win_Transform.DOScale(Vector3.one, 1f);            ////
-            uIManager.PopulateWin(1, m_SocketManager.ResultData.bonus.amount);
+            if (Win_Transform) Win_Transform.gameObject.SetActive(true);
+            if (Win_Transform) Win_Transform.localScale = Vector3.zero;
+            if (PopupPanel) PopupPanel.SetActive(true);
+            if (Win_Transform) Win_Transform.DOScale(Vector3.one, 1f);            ////
+            // uIManager.PopulateWin(1, m_SocketManager.ResultData.bonus.amount);
             PlayWinLooseSound(true);
         }
         DOVirtual.DelayedCall(1.5f, () =>
