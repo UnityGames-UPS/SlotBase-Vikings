@@ -691,6 +691,7 @@ public class SlotBehaviour : MonoBehaviour
 
     if (SocketManager.ResultData.bonus.BonusSpinStopIndex != -1)
     {
+      yield return new WaitForSecondsRealtime(1f);
       CheckBonusGame();
     }
     else
