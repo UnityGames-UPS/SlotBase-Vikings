@@ -307,8 +307,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000015259, y: 0.00099182}
-  m_SizeDelta: {x: 365.96, y: 288.32}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 251.3, y: 278.55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &10523671
 MonoBehaviour:
@@ -332,7 +332,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 362ae56c07b15499a901b35729c76d5e, type: 3}
   m_Type: 0
-  m_PreserveAspect: 1
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -5909,7 +5909,7 @@ MonoBehaviour:
   slotManager: {fileID: 2046803210}
   uiManager: {fileID: 377874625}
   JSManager: {fileID: 1029290966}
-  testToken: 6c762ad6fa844bb2a657ec13b973b1d1
+  testToken: 9595b42d6ffc4861a8984ff007940812
   RaycastBlocker: {fileID: 2036107390}
 --- !u!1 &502968745
 GameObject:
@@ -23162,7 +23162,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 130.499, y: -847}
+  m_AnchoredPosition: {x: 130.49902, y: -847}
   m_SizeDelta: {x: 150, y: 2530}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1814462061
@@ -23386,8 +23386,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -896.48, y: -305.65994}
-  m_SizeDelta: {x: 365.96, y: 288.32}
+  m_AnchoredPosition: {x: -967, y: -313.53}
+  m_SizeDelta: {x: 458.64, y: 407.71}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1830755229
 GameObject:
