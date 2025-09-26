@@ -325,7 +325,7 @@ public class UIManager : MonoBehaviour
 
   private void StartFreeSpins(int spins)
   {
-    if (MainPopup_Object) MainPopup_Object.SetActive(false);
+    // if (MainPopup_Object) MainPopup_Object.SetActive(false);
     if (FreeSpinPopup_Object) FreeSpinPopup_Object.SetActive(false);
     slotManager.FreeSpin(spins);
   }
@@ -334,12 +334,12 @@ public class UIManager : MonoBehaviour
   {
     int ExtraSpins = spins - FreeSpins;
     FreeSpins = spins;
-    Debug.Log("ExtraSpins: " + ExtraSpins);
-    Debug.Log("Total Spins: " + spins);
+    // Debug.Log("ExtraSpins: " + ExtraSpins);
+    // Debug.Log("Total Spins: " + spins);
     if (FreeSpinPopup_Object) FreeSpinPopup_Object.SetActive(true);
     if (Free_Text) Free_Text.text = ExtraSpins.ToString() + " Free spins awarded.";
-    if (MainPopup_Object) MainPopup_Object.SetActive(true);
-    DOVirtual.DelayedCall(2f, () =>
+    // if (MainPopup_Object) MainPopup_Object.SetActive(true);
+    DOVirtual.DelayedCall(1.5f, () =>
     {
       StartFreeSpins(spins);
     });
