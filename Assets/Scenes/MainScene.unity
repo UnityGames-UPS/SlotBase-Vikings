@@ -29337,7 +29337,7 @@ MonoBehaviour:
   CanvasScaler: {fileID: 51930702}
   MatchWidth: 0
   MatchHeight: 1
-  PortraitMatchWandH: 0.46
+  PortraitMatchWandH: 0.44
   transitionDuration: 0.2
   waitForRotation: 0.2
 --- !u!4 &2137985478
