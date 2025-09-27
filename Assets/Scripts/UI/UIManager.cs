@@ -327,7 +327,11 @@ public class UIManager : MonoBehaviour
   {
     // if (MainPopup_Object) MainPopup_Object.SetActive(false);
     if (FreeSpinPopup_Object) FreeSpinPopup_Object.SetActive(false);
-    slotManager.FreeSpin(spins);
+    
+    DOVirtual.DelayedCall(1.5f, () =>
+    {
+      slotManager.FreeSpin(spins);
+    });
   }
 
   internal void FreeSpinProcess(int spins)
