@@ -286,6 +286,7 @@ public class SlotBehaviour : MonoBehaviour
 
   private IEnumerator FreeSpinCoroutine(int spinchances)
   {
+    yield return new WaitForSecondsRealtime(1.5f);
     int i = 0;
     while (i < spinchances)
     {
