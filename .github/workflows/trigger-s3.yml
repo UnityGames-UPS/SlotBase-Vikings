@@ -1,0 +1,12 @@
+name: Trigger S3 Upload
+
+on:
+  push:
+    branches:
+      - dev-build
+
+jobs:
+  call-reusable:
+    uses: UnityGames-UPS/unity-build-pipeline/.github/workflows/upload-to-s3.yml@main
+    with:
+      s3_folder: SL-VIK  
