@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev-build
+  workflow_dispatch:    
 
 jobs:
   call-reusable:
