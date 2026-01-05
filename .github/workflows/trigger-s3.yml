@@ -1,21 +1,13 @@
-name: Trigger S3 Upload
+name: Trigger S3 Upload for Main
 
 on:
   push:
     branches:
       - main
-      - dev-build
   workflow_dispatch:
 
 jobs:
-  call-reusable-main:
-    if: github.ref == 'refs/heads/main'
+  call-reusable:
     uses: UnityGames-UPS/unity-build-pipeline/.github/workflows/main.yml@main
     with:
       s3_folder: SL-VIK
-
-  call-reusable-dev-build:
-    if: github.ref == 'refs/heads/dev-build'
-    uses: UnityGames-UPS/unity-build-pipeline/.github/workflows/main.yml@main
-    with:
-      s3_folder: dev/SL-VIK
