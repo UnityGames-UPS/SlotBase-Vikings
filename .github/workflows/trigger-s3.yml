@@ -3,7 +3,7 @@ name: Trigger S3 Upload
 on:
   push:
     branches:
-      - B2B-Build
+      - B2B-DevBuild
   workflow_dispatch:    
 
 jobs:
