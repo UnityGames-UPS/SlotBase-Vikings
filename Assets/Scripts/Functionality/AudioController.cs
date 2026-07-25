@@ -15,6 +15,11 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip[] Bonusclips;
     [SerializeField] private AudioSource bg_audioBonus;
     [SerializeField] private AudioSource audioPlayer_Bonus;
+
+    private bool bgUserMuted = false;
+    private bool buttonUserMuted = false;
+    private bool wlUserMuted = false;
+
     private void Start()
     {
         if (bg_adudio) bg_adudio.Play();
@@ -22,7 +27,7 @@ public class AudioController : MonoBehaviour
         audioSpin_button.clip = clips[clips.Length - 2];
     }
 
-    internal void CheckFocusFunction(bool focus, bool IsSpinning)
+  internal void CheckFocusFunction(bool focus, bool IsSpinning)
     {
         if (!focus)
         {
@@ -145,23 +150,49 @@ public class AudioController : MonoBehaviour
         switch (type)
         {
             case "bg":
+                bgUserMuted = toggle;
                 bg_adudio.mute = toggle;
                 bg_audioBonus.mute = toggle;
+                if (!toggle) { bg_adudio.UnPause(); bg_audioBonus.UnPause(); }
                 break;
             case "button":
+                buttonUserMuted = toggle;
                 audioPlayer_button.mute = toggle;
                 audioSpin_button.mute = toggle;
+                if (!toggle) { audioPlayer_button.UnPause(); audioSpin_button.UnPause(); }
                 break;
             case "wl":
+                wlUserMuted = toggle;
                 audioPlayer_wl.mute = toggle;
                 audioPlayer_Bonus.mute = toggle;
+                if (!toggle) { audioPlayer_wl.UnPause(); audioPlayer_Bonus.UnPause(); }
                 break;
             case "all":
+                bgUserMuted = toggle;
+                buttonUserMuted = toggle;
+                wlUserMuted = toggle;
                 audioPlayer_wl.mute = toggle;
                 bg_adudio.mute = toggle;
                 audioPlayer_button.mute = toggle;
                 audioSpin_button.mute = toggle;
+                if (!toggle)
+                {
+                    bg_adudio.UnPause();
+                    audioPlayer_button.UnPause();
+                    audioSpin_button.UnPause();
+                    audioPlayer_wl.UnPause();
+                }
                 break;
         }
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        bg_adudio.mute = focus ? bgUserMuted : true;
+        bg_audioBonus.mute = focus ? bgUserMuted : true;
+        audioPlayer_button.mute = focus ? buttonUserMuted : true;
+        audioSpin_button.mute = focus ? buttonUserMuted : true;
+        audioPlayer_wl.mute = focus ? wlUserMuted : true;
+        audioPlayer_Bonus.mute = focus ? wlUserMuted : true;
     }
 }
