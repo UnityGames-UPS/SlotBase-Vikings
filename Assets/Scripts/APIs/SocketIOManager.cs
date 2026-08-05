@@ -315,6 +315,7 @@ public class SocketIOManager : MonoBehaviour
   //Backend-pushed, out-of-band balance update — userId/gameId in the payload are not used client-side.
   private void OnBalanceSync(string data)
   {
+    Debug.Log("Balance Sync Event: " + data);
     BalanceSyncPayload syncPayload = JsonConvert.DeserializeObject<BalanceSyncPayload>(data);
     if (syncPayload == null) return;
 
