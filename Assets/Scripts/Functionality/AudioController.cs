@@ -19,36 +19,13 @@ public class AudioController : MonoBehaviour
     private bool bgUserMuted = false;
     private bool buttonUserMuted = false;
     private bool wlUserMuted = false;
+    private bool isForceMuted = false;
 
     private void Start()
     {
         if (bg_adudio) bg_adudio.Play();
         audioPlayer_button.clip = clips[clips.Length - 1];
         audioSpin_button.clip = clips[clips.Length - 2];
-    }
-
-  internal void CheckFocusFunction(bool focus, bool IsSpinning)
-    {
-        if (!focus)
-        {
-            bg_adudio.Pause();
-            audioPlayer_wl.Pause();
-            audioPlayer_button.Pause();
-        }
-        else
-        {
-            if (!bg_adudio.mute) bg_adudio.UnPause();
-            if (IsSpinning)
-            {
-                if (!audioPlayer_wl.mute) audioPlayer_wl.UnPause();
-            }
-            else
-            {
-                StopWLAaudio();
-            }
-            if (!audioPlayer_button.mute) audioPlayer_button.UnPause();
-
-        }
     }
 
     internal void SwitchBGSound(bool isbonus)
@@ -145,54 +122,69 @@ public class AudioController : MonoBehaviour
         bg_adudio.Stop();
     }
 
+    //User-toggle-driven — the sound/music buttons in UIManager.
     internal void ToggleMute(bool toggle, string type = "all")
     {
+        //An explicit user interaction proves the game currently has real interactive focus, so a
+        //stale forced-mute must never block the button — clear it before applying the category state.
+        isForceMuted = false;
+
         switch (type)
         {
             case "bg":
                 bgUserMuted = toggle;
-                bg_adudio.mute = toggle;
-                bg_audioBonus.mute = toggle;
-                if (!toggle) { bg_adudio.UnPause(); bg_audioBonus.UnPause(); }
                 break;
             case "button":
                 buttonUserMuted = toggle;
-                audioPlayer_button.mute = toggle;
-                audioSpin_button.mute = toggle;
-                if (!toggle) { audioPlayer_button.UnPause(); audioSpin_button.UnPause(); }
                 break;
             case "wl":
                 wlUserMuted = toggle;
-                audioPlayer_wl.mute = toggle;
-                audioPlayer_Bonus.mute = toggle;
-                if (!toggle) { audioPlayer_wl.UnPause(); audioPlayer_Bonus.UnPause(); }
                 break;
             case "all":
                 bgUserMuted = toggle;
                 buttonUserMuted = toggle;
                 wlUserMuted = toggle;
-                audioPlayer_wl.mute = toggle;
-                bg_adudio.mute = toggle;
-                audioPlayer_button.mute = toggle;
-                audioSpin_button.mute = toggle;
-                if (!toggle)
-                {
-                    bg_adudio.UnPause();
-                    audioPlayer_button.UnPause();
-                    audioSpin_button.UnPause();
-                    audioPlayer_wl.UnPause();
-                }
                 break;
+        }
+
+        ApplyUserMute();
+    }
+
+    private void ApplyUserMute()
+    {
+        if (bg_adudio) bg_adudio.mute = bgUserMuted;
+        if (bg_audioBonus) bg_audioBonus.mute = bgUserMuted;
+        if (audioPlayer_button) audioPlayer_button.mute = buttonUserMuted;
+        if (audioSpin_button) audioSpin_button.mute = buttonUserMuted;
+        if (audioPlayer_wl) audioPlayer_wl.mute = wlUserMuted;
+        if (audioPlayer_Bonus) audioPlayer_Bonus.mute = wlUserMuted;
+    }
+
+    //Focus-driven — called from BOTH UIManager.OnFocusChanged (JS path) and OnApplicationFocus below.
+    //Never writes the user flags, so regaining focus restores exactly the user's last chosen setting.
+    internal void SetMuteAll(bool forceMute)
+    {
+        if (forceMute == isForceMuted) return;   //already in that state — don't re-force/re-restore
+        isForceMuted = forceMute;
+
+        if (forceMute)
+        {
+            if (bg_adudio) bg_adudio.mute = true;
+            if (bg_audioBonus) bg_audioBonus.mute = true;
+            if (audioPlayer_button) audioPlayer_button.mute = true;
+            if (audioSpin_button) audioSpin_button.mute = true;
+            if (audioPlayer_wl) audioPlayer_wl.mute = true;
+            if (audioPlayer_Bonus) audioPlayer_Bonus.mute = true;
+        }
+        else
+        {
+            ApplyUserMute();
         }
     }
 
+    //Native/editor focus path — calls the SAME method the WebGL OnFocusChanged path calls.
     private void OnApplicationFocus(bool focus)
     {
-        bg_adudio.mute = focus ? bgUserMuted : true;
-        bg_audioBonus.mute = focus ? bgUserMuted : true;
-        audioPlayer_button.mute = focus ? buttonUserMuted : true;
-        audioSpin_button.mute = focus ? buttonUserMuted : true;
-        audioPlayer_wl.mute = focus ? wlUserMuted : true;
-        audioPlayer_Bonus.mute = focus ? wlUserMuted : true;
+        SetMuteAll(!focus);
     }
 }

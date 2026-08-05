@@ -135,7 +135,6 @@ public class SlotBehaviour : MonoBehaviour
   internal bool IsAutoSpin = false;
   internal bool IsFreeSpin = false;
   private bool IsSpinning = false;
-  private bool CheckSpinAudio = false;
   internal bool CheckPopups = false;
   internal int BetCounter = 0;
   private double currentBalance = 0;
@@ -310,6 +309,14 @@ public class SlotBehaviour : MonoBehaviour
   }
   #endregion
 
+  //Externally pushed balance correction — snap the display (no win-style tween) and re-check the gate.
+  internal void UpdateBalanceDisplay(double newBalance)
+  {
+    currentBalance = newBalance;
+    if (Balance_text) Balance_text.text = newBalance.ToString("F3");
+    CompareBalance();
+  }
+
   private void CompareBalance()
   {
     if (currentBalance < currentTotalBet)
@@ -439,11 +446,6 @@ public class SlotBehaviour : MonoBehaviour
     uiManager.InitialiseUIData(SocketManager.UIData.paylines);
   }
   #endregion
-
-  private void OnApplicationFocus(bool focus)
-  {
-    audioController.CheckFocusFunction(focus, CheckSpinAudio);
-  }
 
   //function to populate animation sprites accordingly
   private void PopulateAnimationSprites(ImageAnimation animScript, int val)
@@ -593,7 +595,6 @@ public class SlotBehaviour : MonoBehaviour
       yield break;
     }
     if (audioController) audioController.PlayWLAudio("spin");
-    CheckSpinAudio = true;
 
     IsSpinning = true;
 
@@ -729,6 +730,12 @@ public class SlotBehaviour : MonoBehaviour
         StopAutoSpin();
         yield return new WaitForSeconds(0.1f);
       }
+    }
+
+    if (SocketManager.ResultData.payload.winAmount > 0)
+    {
+      if(!IsFreeSpin && !IsAutoSpin)
+        SocketManager.SendGambleOffer(SocketManager.ResultData.payload.winAmount);
     }
   }
   private void CheckForFeaturesAnimation()
@@ -897,7 +904,6 @@ public class SlotBehaviour : MonoBehaviour
       //if (audioController) audioController.PlayWLAudio("lose");
       if (audioController) audioController.StopWLAaudio();
     }
-    CheckSpinAudio = false;
   }
 
   private void WinningsAnim(bool IsStart)

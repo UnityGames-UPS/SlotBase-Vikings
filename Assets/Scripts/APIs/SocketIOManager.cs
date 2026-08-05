@@ -25,7 +25,7 @@ public class SocketIOManager : MonoBehaviour
   private SocketManager manager;
   protected string SocketURI = null;
   // protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
-  protected string TestSocketURI = "https://devrealtime.dingdinghouse.com/";
+  protected string TestSocketURI = "https://78jgzmmv-5001.inc1.devtunnels.ms/";
   protected string nameSpace = "playground";
   private Socket gameSocket;
   protected string gameID = "SL-VIK";
@@ -219,6 +219,7 @@ public class SocketIOManager : MonoBehaviour
     gameSocket.On<string>("alert", OnSocketAlert);
     gameSocket.On<string>("pong", OnPongReceived); //Back2 Start
     gameSocket.On<string>("AnotherDevice", OnSocketOtherDevice);
+    gameSocket.On<string>("balance:sync", OnBalanceSync);
 
     manager.Open(); //Back2 Start
   }
@@ -311,6 +312,18 @@ public class SocketIOManager : MonoBehaviour
     uiManager.ADfunction();
   }
 
+  //Backend-pushed, out-of-band balance update — userId/gameId in the payload are not used client-side.
+  private void OnBalanceSync(string data)
+  {
+    BalanceSyncPayload syncPayload = JsonConvert.DeserializeObject<BalanceSyncPayload>(data);
+    if (syncPayload == null) return;
+
+    if (PlayerData == null) PlayerData = new Player();
+    PlayerData.balance = syncPayload.balance;
+
+    slotManager.UpdateBalanceDisplay(syncPayload.balance);
+  }
+
   private void SendPing() //Back2 Start
   {
     ResetPingRoutine();
@@ -364,6 +377,7 @@ public class SocketIOManager : MonoBehaviour
       yield return new WaitForSeconds(pingInterval);
     }
   } //Back2 end
+
   internal void SendDataWithNamespace(string eventName, string json = null)
   {
     // Send the message
@@ -487,6 +501,19 @@ public class SocketIOManager : MonoBehaviour
     SendDataWithNamespace("request", json);
   }
 
+  internal void SendGambleOffer(double win)
+  {
+    GambleOffer gambleOffer = new()
+    {
+      type = "GAMBLE_OFFER",
+      payload = new GamblePayload
+      {
+        winning = win
+      }
+    };
+    SendDataWithNamespace("request", JsonUtility.ToJson(gambleOffer));
+  }
+
   private List<string> ConvertListListIntToListString(List<List<int>> listOfLists)
   {
     List<string> resultList = new List<string>();
@@ -507,6 +534,19 @@ public class SocketIOManager : MonoBehaviour
 
     return resultList;
   }
+}
+
+[Serializable]
+public class GambleOffer
+{
+  public string type = "GAMBLE_OFFER";
+  public GamblePayload payload;
+}
+
+[Serializable]
+public class GamblePayload
+{
+  public double winning;
 }
 
 [Serializable]
@@ -611,6 +651,12 @@ public class Symbol
 public class Player
 {
   public double balance { get; set; }
+}
+
+[Serializable]
+public class BalanceSyncPayload
+{
+  public double balance;
 }
 
 [Serializable]
