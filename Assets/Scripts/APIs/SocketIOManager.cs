@@ -503,18 +503,18 @@ public class SocketIOManager : MonoBehaviour
     SendDataWithNamespace("request", json);
   }
 
-  internal void SendGambleOffer(double win)
-  {
-    GambleOffer gambleOffer = new()
-    {
-      type = "GAMBLE_OFFER",
-      payload = new GamblePayload
-      {
-        winning = win
-      }
-    };
-    SendDataWithNamespace("request", JsonUtility.ToJson(gambleOffer));
-  }
+  // internal void SendGambleOffer(double win)
+  // {
+  //   GambleOffer gambleOffer = new()
+  //   {
+  //     type = "GAMBLE_OFFER",
+  //     payload = new GamblePayload
+  //     {
+  //       winning = win
+  //     }
+  //   };
+  //   SendDataWithNamespace("request", JsonUtility.ToJson(gambleOffer));
+  // }
 
   private List<string> ConvertListListIntToListString(List<List<int>> listOfLists)
   {

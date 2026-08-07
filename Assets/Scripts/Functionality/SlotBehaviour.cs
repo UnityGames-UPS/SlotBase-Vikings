@@ -732,11 +732,11 @@ public class SlotBehaviour : MonoBehaviour
       }
     }
 
-    if (SocketManager.ResultData.payload.winAmount > 0)
-    {
-      if(!IsFreeSpin && !IsAutoSpin)
-        SocketManager.SendGambleOffer(SocketManager.ResultData.payload.winAmount);
-    }
+    // if (SocketManager.ResultData.payload.winAmount > 0)
+    // {
+    //   if(!IsFreeSpin && !IsAutoSpin)
+    //     SocketManager.SendGambleOffer(SocketManager.ResultData.payload.winAmount);
+    // }
   }
   private void CheckForFeaturesAnimation()
   {
