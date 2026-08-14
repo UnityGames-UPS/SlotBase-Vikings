@@ -220,6 +220,7 @@ public class SocketIOManager : MonoBehaviour
     gameSocket.On<string>("pong", OnPongReceived); //Back2 Start
     gameSocket.On<string>("AnotherDevice", OnSocketOtherDevice);
     gameSocket.On<string>("balance:sync", OnBalanceSync);
+    gameSocket.On<string>("gamble:result", OnGambleResult);
 
     manager.Open(); //Back2 Start
   }
@@ -323,6 +324,25 @@ public class SocketIOManager : MonoBehaviour
     PlayerData.balance = syncPayload.balance;
 
     slotManager.UpdateBalanceDisplay(syncPayload.balance);
+  }
+
+  //Response to SendGambleOffer — host platform reports the gamble result after rendering its own UI.
+  private void OnGambleResult(string data)
+  {
+    Debug.Log("Gamble Result Event: " + data);
+    GambleResultPayload gambleResult = JsonConvert.DeserializeObject<GambleResultPayload>(data);
+    if (gambleResult == null) return;
+
+    if (!gambleResult.success)
+    {
+      Debug.LogError("Gamble result failed: " + data);
+      return;
+    }
+
+    if (PlayerData == null) PlayerData = new Player();
+    PlayerData.balance = gambleResult.balance;
+
+    slotManager.UpdateGambleResult(gambleResult.balance, gambleResult.winAmount);
   }
 
   private void SendPing() //Back2 Start
@@ -658,6 +678,14 @@ public class Player
 public class BalanceSyncPayload
 {
   public double balance;
+}
+
+[Serializable]
+public class GambleResultPayload
+{
+  public bool success;
+  public double balance;
+  public double winAmount;
 }
 
 [Serializable]

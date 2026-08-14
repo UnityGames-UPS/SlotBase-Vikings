@@ -317,6 +317,25 @@ public class SlotBehaviour : MonoBehaviour
     CompareBalance();
   }
 
+  //Response to a gamble offer resolved on the host platform — sync balance and win amount back into Unity.
+  internal void UpdateGambleResult(double newBalance, double newWinAmount)
+  {
+    currentBalance = newBalance;
+    if (Balance_text) Balance_text.text = newBalance.ToString("F3");
+    if (TotalWin_text) TotalWin_text.text = newWinAmount.ToString("F3");
+
+    if (WinTween != null && WinTween.IsActive())
+    {
+      WinningsAnim(false);
+    }
+    if (newWinAmount > 0)
+    {
+      WinningsAnim(true);
+    }
+
+    CompareBalance();
+  }
+
   private void CompareBalance()
   {
     if (currentBalance < currentTotalBet)
@@ -908,13 +927,13 @@ public class SlotBehaviour : MonoBehaviour
 
   private void WinningsAnim(bool IsStart)
   {
+    WinTween.Kill();
     if (IsStart)
     {
       WinTween = TotalWin_text.gameObject.GetComponent<RectTransform>().DOScale(new Vector2(1.5f, 1.5f), 1f).SetLoops(-1, LoopType.Yoyo).SetDelay(0);
     }
     else
     {
-      WinTween.Kill();
       TotalWin_text.gameObject.GetComponent<RectTransform>().localScale = Vector3.one;
     }
   }
