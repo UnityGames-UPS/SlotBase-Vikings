@@ -1,4 +1,4 @@
-name: Trigger S3 Upload
+name: Trigger S3 Upload 
 
 on:
   push:
