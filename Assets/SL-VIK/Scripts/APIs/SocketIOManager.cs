@@ -25,7 +25,7 @@ public class SocketIOManager : MonoBehaviour
   private SocketManager manager;
   protected string SocketURI = null;
   // protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
-  protected string TestSocketURI = "https://78jgzmmv-5001.inc1.devtunnels.ms/";
+  protected string TestSocketURI = "https://devrealtime.dingdinghouse.com/";
   protected string nameSpace = "playground";
   private Socket gameSocket;
   protected string gameID = "SL-VIK";
