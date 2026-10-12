@@ -39,7 +39,6 @@
     const canvas = document.querySelector("#unity-canvas");
 
     function resizeCanvas() {
-      return;
       // visualViewport is the accurate visible area on iOS; fall back to innerWidth/Height.
       var vv = window.visualViewport;
       var w = Math.round(vv ? vv.width : window.innerWidth);
@@ -57,11 +56,11 @@
     window.addEventListener('orientationchange', resizeCanvas);
     if (window.visualViewport) {
       window.visualViewport.addEventListener('resize', resizeCanvas);
-      // window.visualViewport.addEventListener('scroll', function () { window.scrollTo(0, 0); });
+      window.visualViewport.addEventListener('scroll', function () { window.scrollTo(0, 0); });
     }
     // Scroll-lock: CSS touch-action alone won't stop iOS pinch-pan; non-passive touchmove does.
     // Unity still receives the touch events (preventDefault only cancels browser scroll/zoom).
-    // window.addEventListener('scroll', function () { window.scrollTo(0, 0); }, { passive: true });
+    window.addEventListener('scroll', function () { window.scrollTo(0, 0); }, { passive: true });
     document.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
     document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
     document.addEventListener('gesturechange', function (e) { e.preventDefault(); });
