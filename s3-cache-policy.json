@@ -1,0 +1,15 @@
+
+{
+  "Build/Build.data.unityweb": {
+    "cache_control": "public, max-age=31536000, immutable"
+  },
+  "Build/Build.wasm.unityweb": {
+    "cache_control": "public, max-age=31536000, immutable"
+  },
+  "Build/Build.loader.js": {
+    "cache_control": "no-cache, no-store, must-revalidate"
+  },
+  "version.json": {
+    "cache_control": "no-cache, no-store, must-revalidate"
+  }
+}
